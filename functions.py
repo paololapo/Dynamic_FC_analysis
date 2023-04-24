@@ -78,7 +78,7 @@ def pooled_v_stream(data, tau_min, tau_max):
   return v_array
 
 
-def tSNE_evolution(dFC_stream):
+def tSNE_evolution(dFC_stream, TSNE):
   #Create empty matrix of UpperTri: shape = (number of FC in dFC stream, len(UpperTri))
   dim_UpperTri = len(dFC_stream[0][np.triu_indices(dFC_stream[0].shape[1], k=1)])
   UpperTri_matrix = np.zeros(shape=(dFC_stream.shape[0], dim_UpperTri))
