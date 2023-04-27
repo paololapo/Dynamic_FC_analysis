@@ -78,7 +78,7 @@ def pooled_v_stream(data, tau_min, tau_max):
   return v_array
 
 
-def tSNE_evolution(dFC_stream, TSNE):
+def tSNE_evolution(dFC_stream, TSNE, n):
   #Create empty matrix of UpperTri: shape = (number of FC in dFC stream, len(UpperTri))
   dim_UpperTri = len(dFC_stream[0][np.triu_indices(dFC_stream[0].shape[1], k=1)])
   UpperTri_matrix = np.zeros(shape=(dFC_stream.shape[0], dim_UpperTri))
@@ -92,10 +92,9 @@ def tSNE_evolution(dFC_stream, TSNE):
     UpperTri_matrix[i] = UpperTri
 
   #Points in 2D space
-  embedded_points = TSNE(n_components=2, perplexity=30.0, early_exaggeration=4.0, method="exact").fit_transform(UpperTri_matrix)
+  embedded_points = TSNE(n_components=n, perplexity=30.0, early_exaggeration=4.0, method="exact").fit_transform(UpperTri_matrix)
   
-  #Isolate x, y
-  feature1 = embedded_points[:, 0]
-  feature2 = embedded_points[:, 1]
+  #Isolate feauture
+  out = [embedded_points[:, i] for i in range(n)]
   
-  return feature1, feature2
+  return out
