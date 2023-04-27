@@ -68,7 +68,7 @@ def dFC_matrix(dFC_stream):
 def pooled_v_stream(data, tau_min, tau_max):
   v_array = np.array([])
 
-  for tau in range(tau_max - tau_min + 1):
+  for tau in np.arange(start=tau_min, stop=tau_max+1):
     #Get dFC stream and v distribution at fixed tau
     stream_dFC = dFC_stream(data, tau)
     stream_v = v_stream(stream_dFC)
