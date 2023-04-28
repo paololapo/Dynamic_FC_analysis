@@ -32,8 +32,9 @@ def v_dFC(t, tau, data):
 def dFC_stream(data, tau):
   stream = np.zeros(shape=(1, data.shape[1], data.shape[1]))
   
-  #range(100) needs to be updated
-  for i in range(100):
+  n = data.shape[0]
+  #Iterate from 0 to n-tau (included) with step=tau
+  for i in range(0, n-tau+1, tau):
     stream = np.append(stream, [FC(i+tau/2, tau, data)], axis=0)
   
   return stream[1:]
