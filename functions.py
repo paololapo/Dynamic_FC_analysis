@@ -7,7 +7,7 @@ def FC(t, tau, data):
   data_window = data[int((t-tau/2)):int((t+tau/2))]
 
   #.corr() method returns a Pandas DataFrame, .values makes it a Numpy Array (convenient for later consistency)
-  #Lost information about names of DafaFrame columns 
+  #Lost information about names of DafaFrame columns, if any 
   FC_dataframe = data_window.corr(method="pearson")
   FC_array = FC_dataframe.values
 
@@ -48,6 +48,7 @@ def v_stream(dFC_stream):
     v_array = np.append(v_array, v)
   
   return v_array
+
 
 def dFC_matrix(dFC_stream):
   #Number of FC in dFC_stream and number of elements in UpperTri matrices
@@ -112,7 +113,7 @@ def tSNE_evolution(dFC_stream, TSNE, n):
     
     UpperTri_matrix[i] = UpperTri
 
-  #Points in 2D space
+  #Points in nD space
   embedded_points = TSNE(n_components=n, perplexity=30.0, early_exaggeration=4.0, method="exact").fit_transform(UpperTri_matrix)
   
   #Isolate feauture
