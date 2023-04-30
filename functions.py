@@ -49,8 +49,28 @@ def v_stream(dFC_stream):
   
   return v_array
 
-
 def dFC_matrix(dFC_stream):
+  #Number of FC in dFC_stream and number of elements in UpperTri matrices
+  num_FC = dFC_stream.shape[0]
+  n = dFC_stream.shape[1]
+  num_UpperTri = int(n*(n-1)/2)
+  
+  #Save UpperTri vectors in a Pandas dataframe
+  UpperTri_vectors = pd.DataFrame(np.zeros((num_UpperTri, num_FC)))
+
+  for i in range(num_FC):
+    FC_i = dFC_stream[i]
+    UpperTri_vectors[i] = FC_i[np.triu_indices(n, k=1)]
+  
+  #Get correlation matrix
+  dFC_dataframe = UpperTri_vectors.corr(method="pearson")
+  matrix = dFC_dataframe.values
+
+  return matrix
+
+
+#Old version of dFC_matrix which can be useful for debugging
+def dFC_matrix_2(dFC_stream):
   #Size of dFC_matrix: number of FC in dFC_stream
   num_FC = dFC_stream.shape[0]
   matrix = np.zeros(shape=(num_FC, num_FC))
