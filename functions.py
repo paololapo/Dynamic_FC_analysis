@@ -70,7 +70,7 @@ def dFC_matrix(dFC_stream):
   return matrix
 
 
-#Old version of dFC_matrix which can be useful for debugging
+#Old version of dFC_matrix which can be useful for debugging: equivalent but slower
 def dFC_matrix_2(dFC_stream):
   #Size of dFC_matrix: number of FC in dFC_stream
   num_FC = dFC_stream.shape[0]
@@ -82,7 +82,7 @@ def dFC_matrix_2(dFC_stream):
       matrix[i, j] = dFC(dFC_stream[i], dFC_stream[j])
   
   #Get the symmetric matrix
-  matrix = matrix + matrix.T - np.diag(matrix)
+  matrix = matrix + matrix.T - np.diag(np.diag(matrix))
 
   return matrix
 
