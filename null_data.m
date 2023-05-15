@@ -1,3 +1,6 @@
+%This file is meant to be used with functions imported by MINDy repository.
+%Just copy-paste the MINDy_master repository in this folder before running. 
+
 %Input
 dataset = {};
 data_path = ".\data";
