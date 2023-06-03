@@ -120,3 +120,34 @@ def tSNE_evolution(dFC_stream, TSNE, n):
   out = [embedded_points[:, i] for i in range(n)]
   
   return out
+
+
+#Use MINDy model and parameters to propagate signals
+def propagation(W, alpha, D, sigma):
+    id_max = 1200
+    Xt = np.zeros((119, id_max))
+    x1 = np.random.random((119))*1.5 - 1       #x1 random
+    Xt[:, 0] = x1
+
+    Psi = np.zeros((119, id_max))
+
+    TR = 0.7
+    b = 6.6667
+    for i in range(id_max-1):
+
+        t1 = (alpha**2 + (b*x1+0.5)**2)**0.5
+        t2 = (alpha**2 + (b*x1-0.5)**2)**0.5
+        psi = t1 - t2
+
+        eps = np.random.normal(0, sigma, x1.size)
+        x2 = x1 + (np.dot(W, psi) - D*x1)*TR + eps
+
+        Psi[:, i+1] = psi
+
+        Xt[:, i+1] = x2
+        x1 = x2
+
+
+    dfXt = pd.DataFrame(Xt)
+    simul = dfXt.T
+    return simul
