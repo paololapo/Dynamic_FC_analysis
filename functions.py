@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-#t and tau are indices, could be necessary some conversion
+#t and tau are indices (TRs), could be necessary some conversion
 def FC(t, tau, data):
   #Define the time window
   data_window = data[int((t-tau/2)):int((t+tau/2))]
@@ -13,7 +13,10 @@ def FC(t, tau, data):
 
   return FC_array
 
+#FC of the full scan session
+full_FC = lambda df : df.corr("pearson").values
 
+#Dynamic functional connectivity given two FC matrices
 def dFC(FC_1, FC_2):
   #Get the upper triangular matrix of FC
   UpperTri_1 = FC_1[np.triu_indices(FC_1.shape[1], k=1)]
@@ -23,12 +26,11 @@ def dFC(FC_1, FC_2):
   rho = np.corrcoef(UpperTri_1, UpperTri_2)[0, 1]
   return rho
 
-
 #Note that it is being used the same tau both for FC window and speed
 def v_dFC(t, tau, data):
   return  1 - dFC(FC(t, tau, data), FC(t+tau, tau, data))
 
-
+#Get the dFC stream
 def dFC_stream(data, tau):
   stream = np.zeros(shape=(1, data.shape[1], data.shape[1]))
   
@@ -39,7 +41,7 @@ def dFC_stream(data, tau):
   
   return stream[1:]
 
-
+#dFC speed from the dFC stream
 def v_stream(dFC_stream):
   v_array = np.array([])
 
@@ -49,7 +51,7 @@ def v_stream(dFC_stream):
   
   return v_array
 
-
+#dFC matrix from the dFC stream
 def dFC_matrix(dFC_stream):
   #Number of FC in dFC_stream and number of elements in UpperTri matrices
   num_FC = dFC_stream.shape[0]
@@ -69,7 +71,6 @@ def dFC_matrix(dFC_stream):
 
   return matrix
 
-
 #Old version of dFC_matrix which can be useful for debugging: equivalent but slower
 def dFC_matrix_2(dFC_stream):
   #Size of dFC_matrix: number of FC in dFC_stream
@@ -86,7 +87,8 @@ def dFC_matrix_2(dFC_stream):
 
   return matrix
 
-
+#dFC speed from data by indices
+#Can be used also using tau_min=tau_max to get dFC speed from data
 def pooled_v_stream(data, tau_min, tau_max):
   v_array = np.array([])
 
@@ -99,7 +101,7 @@ def pooled_v_stream(data, tau_min, tau_max):
   
   return v_array
 
-
+#tSNE projection
 def tSNE_evolution(dFC_stream, TSNE, n):
   #Create empty matrix of UpperTri: shape = (number of FC in dFC stream, len(UpperTri))
   dim_UpperTri = len(dFC_stream[0][np.triu_indices(dFC_stream[0].shape[1], k=1)])
@@ -121,8 +123,8 @@ def tSNE_evolution(dFC_stream, TSNE, n):
   
   return out
 
-
 #Use MINDy model and parameters to propagate signals
+#hidden hyperparameters: TR and id_max
 def propagation(W, alpha, D, sigma):
     id_max = 1200
     Xt = np.zeros((119, id_max))
@@ -151,3 +153,4 @@ def propagation(W, alpha, D, sigma):
     dfXt = pd.DataFrame(Xt)
     simul = dfXt.T
     return simul
+
