@@ -154,3 +154,45 @@ def propagation(W, alpha, D, sigma):
     simul = dfXt.T
     return simul
 
+#Get fluctuation strengths to perform DFA
+def get_fluctuation(data, k):
+    #Cumulative unbounded process
+    integrated_data = np.cumsum(data) - np.mean(data)
+
+    #Split into M segments of length k
+    num_segments = len(integrated_data) // k
+    segments = np.array_split(integrated_data[:num_segments * k], num_segments)
+
+    #Local fit for each segment
+    def fit_polynomial(segment, order=1):
+        x = np.arange(len(segment))
+        coeffs = np.polyfit(x, segment, order)
+        fitted_values = np.polyval(coeffs, x)
+        return fitted_values
+
+    def fit_polynomials_to_segments(segments, order=1):
+        fitted_segments = [fit_polynomial(segment, order) for segment in segments]
+        return fitted_segments
+
+    pol_order = 1   #Linear fit
+    fitted_segments = fit_polynomials_to_segments(segments, pol_order)
+
+    #Compute the fluctuation strength for each segment
+    f_strengths = []
+    for q in range(len(segments)):
+        squared_fluctuations = (segments[q] - fitted_segments[q])**2
+        f_strengths.append(np.mean(squared_fluctuations)**0.5)  
+    
+    #Return the fluctuation for the chosen k
+    return np.mean(f_strengths)
+
+#Actual Detrended fluctuation analysis (DFA
+def do_DFA(data):
+    lengths = np.logspace(2, np.log(len(data)), base=np.e, num=20, dtype=int)   #spaced evenly on the log scale
+    log_fluctuations = [np.log(get_fluctuation(data, k)) for k in lengths]
+    log_lengths = np.log(lengths)
+
+    #Lineared exponential fit
+    A, C = np.polyfit(log_lengths, log_fluctuations, 1)
+    return A
+
