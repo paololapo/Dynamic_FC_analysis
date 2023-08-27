@@ -51,7 +51,7 @@ title!(p3, "Long")
 
 plt = plot(p1, p2, p3, layout=(1, 3), size=(2000, 600))
 plot!(plt, left_margin=13Plots.mm, bottom_margin=10Plots.mm, top_margin=5Plots.mm)
-plot!(plt, tickfontsize=16, guidefontsize=18, legendfontsize=16, titlefontsize=20)
+plot!(plt, tickfontsize=16, guidefontsize=18, legendfontsize=18, titlefontsize=20)
 plot!(gridlinewidth = 1.5)
 savefig(plt, "./plots/sigma_dFC.png")
 display(plt)
