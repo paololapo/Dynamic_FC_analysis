@@ -186,7 +186,7 @@ def get_fluctuation(data, k):
     #Return the fluctuation for the chosen k
     return np.mean(f_strengths)
 
-#Actual Detrended fluctuation analysis (DFA
+#Actual Detrended fluctuation analysis (DFA)
 def do_DFA(data):
     lengths = np.logspace(2, np.log(len(data)), base=np.e, num=20, dtype=int)   #spaced evenly on the log scale
     log_fluctuations = [np.log(get_fluctuation(data, k)) for k in lengths]
