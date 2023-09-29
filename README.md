@@ -1,6 +1,7 @@
 # Dynamic Functional Connectivity Analysis
 ## About the thesis
-This is the GitHub repository of my Bachelor Thesis in Physics. <br>
+This is the GitHub repository of my Bachelor Thesis in Physics, titled *"Dynamical connectivity and nonlinearity in a whole-brain computational model"*. 
+<a href=https://thesis.unipd.it/handle/20.500.12608/53061>Click here for the full text.</a> <br>
 Understanding brain activity, even during the resting state, is an open challenge in neuroscience due to the system's complexity. In this work, we studied whether and how a particular generative causal model (called MINDy) can reproduce a scalar feature of the time series from functional magnetic resonance imaging, the global dynamic functional connectivity speed.
 
 ## About the repository
